@@ -32,15 +32,18 @@ searchBox.addEventListener('input',(e)=>{
 })
 
 function searchMatcher(arr,value) {
-    let matchResults = arr.filter(fruit => {
+    let fruitMap = new Map();
+    arr.filter(fruit => {
         if(fruit.toLowerCase().includes(value)) {return fruit};
-    });
-    let topResults = matchResults.slice(0,7);
-    createElments(topResults);
+    }).slice(0,7).reduce((map,currentFruit)=>{
+        map.set(arr.indexOf(currentFruit),currentFruit);
+        return fruitMap;
+    },fruitMap);
+    createElments(fruitMap);
 }
 
-function createElments(arr){
-    arr.forEach(fruit => {
+function createElments(map){
+    map.forEach(fruit => {
         let listItem = document.createElement('li');
         listItem.setAttribute('class','result');
         listItem.innerText = `${fruit}`;
