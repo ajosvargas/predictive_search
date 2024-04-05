@@ -24,7 +24,7 @@ const fruitInventory = [
 
 searchBox.addEventListener('input',(e)=>{
     searchResults.innerHTML = '';
-    let searchValue = searchBox.value.toLowerCase();
+    let searchValue = searchBox.value.toLowerCase().trim();
     // Do not run function when input value is empty
     if(searchValue.length !== 0) {
         searchMatcher(fruitInventory,searchValue);
@@ -34,9 +34,8 @@ searchBox.addEventListener('input',(e)=>{
 function searchMatcher(arr,value) {
     let matchResults = arr.filter(fruit => {
         if(fruit.toLowerCase().includes(value)) {return fruit};
-    });
-    let topResults = matchResults.slice(0,7);
-    createElments(topResults);
+    }).slice(0,7);
+    createElments(matchResults);
 }
 
 function createElments(arr){
