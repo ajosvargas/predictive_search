@@ -1,5 +1,3 @@
-const searchBox = document.getElementById('search');
-const searchResults = document.getElementById('search_results');
 const fruitInventory = [
     'Apple', 'Apricot', 'Avocado 🥑', 
     'Banana', 'Bilberry', 'Blackberry', 
@@ -20,37 +18,49 @@ const fruitInventory = [
     'Raspberry', 'Salmonberry', 'Rambutan', 'Redcurrant', 
     'Salak', 'Satsuma', 'Soursop', 'Star fruit', 
     'Strawberry', 'Tamarillo', 'Tamarind', 'Yuzu'
-]
+];
 
-searchBox.addEventListener('input',(e)=>{
-    searchResults.innerHTML = '';
-    let searchValue = searchBox.value.toLowerCase().trim();
-    // Do not run function when input value is empty
-    if(searchValue.length !== 0) {
-        searchMatcher(fruitInventory,searchValue);
+class ResultsList {
+    constructor(){
+        this.searchBox = document.getElementById('search');
+        this.searchResults = document.getElementById('search_results');
+        this.addListner();
     }
-})
 
-function searchMatcher(arr,value) {
-    let matchResults = arr.filter(fruit => {
-        if(fruit.toLowerCase().includes(value)) {return fruit};
-    }).slice(0,7);
-    createElments(matchResults);
+    addListner(){
+        this.searchBox.addEventListener('input',(e)=>{
+            this.searchResults.innerHTML = '';
+            let searchValue = this.searchBox.value.toLowerCase().trim();
+            // Do not run function when input value is empty
+            if(searchValue.length !== 0) {
+                this.searchMatcher(fruitInventory,searchValue);
+            }
+        })
+    }
+
+    searchMatcher(arr,value) {
+        let matchResults = arr.filter(fruit => {
+            if(fruit.toLowerCase().includes(value)) {return fruit};
+        }).slice(0,7);
+        this.createElments(matchResults);
+    }
+
+    createElments(arr){
+        arr.forEach(fruit => {
+            let listItem = document.createElement('li');
+            listItem.setAttribute('class','result');
+            listItem.innerText = `${fruit}`;
+            this.addTextToBar(listItem);
+            this.searchResults.append(listItem);
+        })
+    }
+
+    addTextToBar(el){
+        el.addEventListener('click',(e)=>{
+            this.searchBox.value = e.target.innerText;
+            this.searchResults.innerHTML = '';
+        })
+    }
 }
 
-function createElments(arr){
-    arr.forEach(fruit => {
-        let listItem = document.createElement('li');
-        listItem.setAttribute('class','result');
-        listItem.innerText = `${fruit}`;
-        addTextToBar(listItem);
-        searchResults.append(listItem);
-    })
-}
-
-function addTextToBar(el){
-    el.addEventListener('click',(e)=>{
-        searchBox.value = e.target.innerText;
-        searchResults.innerHTML = '';
-    })
-}
+new ResultsList();
